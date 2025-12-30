@@ -1,5 +1,7 @@
 import os
 import shutil
+import sys
+from time import sleep
 
 baseFolder = '/home/justin/Downloads'
 targetFolder = '/tmp/arranged'
@@ -42,9 +44,14 @@ def countAllFilesInFolder(folderPath: str) -> int:
    return len([entry for entry in os.listdir(folderPath) if os.path.isfile(os.path.join(folderPath, entry))])
 
 
+# function to show progress
+#  this will overwrite the same line in the console
 def showProgress(current: int, total: int):
    percent = (current / total) * 100
-   print(f"Progress: {percent:.2f}% ({current}/{total})")
+   sys.stdout.write('\r')
+   sys.stdout.write(f"Progress: {percent:.2f}% ({current}/{total})")
+   sys.stdout.flush()
+
    
 
 #setting up the folders where the files will be copied to 
