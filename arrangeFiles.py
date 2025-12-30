@@ -9,14 +9,13 @@ imageFolder= targetFolder + '/images'
 configFolder = targetFolder + '/configs'
 otherFolder= targetFolder + '/other'
 
-documentExtentions=['.pdf','doc','docx','.txt']
+documentExtentions=['.pdf','.doc','.docx','.txt']
 imageExtentions=['.jpg','.jpeg', '.png', 'tif', '.tiff', '.gif','.svg']
 archiveExtentions=['.zip', '.tar', '.tgz','.tar.gz','.deb', '.jar','.exe', '.dmg']
 configExtentions=['.json', '.yaml', '.yml']
 
 
 def createFolder(folderName):
-  print("creating folder " + folderName)
   os.makedirs(folderName,exist_ok=True)
 
 
@@ -27,13 +26,13 @@ def setupFolders():
         createFolder(folder)
     print("created all folders")    
 
-def copyFromBaseFolderToTargetFolder(fileName, destinationFolder):
+def copyFromBaseFolderToTargetFolder(fileName: str, destinationFolder: str):
    fileOriginalPath = f"{baseFolder}/{fileName}"
    finalDestinationPath = f"{destinationFolder}/{fileName}"
    if os.path.isfile(fileOriginalPath):
       shutil.copy2(src=fileOriginalPath,dst=finalDestinationPath)
 
-def isMatchingExetention(extentions, fileName):
+def isFileMatchingExtention(extentions: list, fileName: str) -> bool:
    for ext in extentions:
      if fileName.endswith(ext):
         return True 
@@ -49,13 +48,13 @@ for entry in entries:
 
      folder=otherFolder
      fileName = entry.name 
-     if isMatchingExetention(documentExtentions, fileName=fileName):
+     if isFileMatchingExtention(documentExtentions, fileName=fileName):
        folder = docFolder
-     if isMatchingExetention(imageExtentions, fileName=fileName):
+     if isFileMatchingExtention(imageExtentions, fileName=fileName):
        folder = imageFolder
-     if isMatchingExetention(archiveExtentions, fileName=fileName):
+     if isFileMatchingExtention(archiveExtentions, fileName=fileName):
        folder = archiveFolders
-     if isMatchingExetention(configExtentions, fileName=fileName):
+     if isFileMatchingExtention(configExtentions, fileName=fileName):
        folder = configFolder      
      # copying the files  
      copyFromBaseFolderToTargetFolder(fileName=fileName,destinationFolder=folder)   
