@@ -90,6 +90,7 @@ for entry in entries:
        folder = configFolder      
      # copying the files  
      copyFromBaseFolderToTargetFolder(fileName=fileName,destinationFolder=folder)
+     # deleting the files from base folder and backup folder after copying
      deleteFromBaseFolder(fileName=fileName,destinationFolder=folder)
      fileProcessedCount += 1
      showProgress(current=fileProcessedCount, total=totalFiles)   
