@@ -3,8 +3,11 @@ import shutil
 import sys
 from time import sleep
 
-baseFolder = '/home/justin/Downloads'
+baseFolder = '/tmp/downloads/Downloads'
+# baseFolder = '/home/justin/Downloads'
+# targetFolder = '/home/justin/Documents/arranged_downloads'
 targetFolder = '/tmp/arranged'
+backupFolder = '/tmp/backup'
 docFolder=targetFolder + '/documents'
 archiveFolders= targetFolder + '/archives'
 imageFolder= targetFolder + '/images'
@@ -22,15 +25,26 @@ def createFolder(folderName):
 
 
 def setupFolders():
-    targetFolders=[docFolder,archiveFolders,imageFolder,configFolder,otherFolder]   
+    targetFolders=[docFolder,archiveFolders,imageFolder,configFolder,otherFolder,backupFolder]   
     for folder in targetFolders:
       createFolder(folder)
 
 def copyFromBaseFolderToTargetFolder(fileName: str, destinationFolder: str):
    fileOriginalPath = f"{baseFolder}/{fileName}"
    finalDestinationPath = f"{destinationFolder}/{fileName}"
+   backupFilePath = f"{backupFolder}/{fileName}"
    if os.path.isfile(fileOriginalPath):
+      shutil.copy2(src=fileOriginalPath,dst=backupFilePath)
       shutil.copy2(src=fileOriginalPath,dst=finalDestinationPath)
+
+def deleteFromBaseFolder(fileName: str, destinationFolder: str):
+   fileOriginalPath = f"{baseFolder}/{fileName}"
+   finalDestinationPath = f"{destinationFolder}/{fileName}"
+   backupFilePath = f"{backupFolder}/{fileName}"
+   if os.path.isfile(fileOriginalPath) and os.path.isfile(finalDestinationPath):
+      os.remove(fileOriginalPath)
+   if os.path.isfile(backupFilePath):
+      os.remove(backupFilePath)
 
 def isFileMatchingExtention(extentions: list, fileName: str) -> bool:
    for ext in extentions:
@@ -76,6 +90,7 @@ for entry in entries:
        folder = configFolder      
      # copying the files  
      copyFromBaseFolderToTargetFolder(fileName=fileName,destinationFolder=folder)
+     deleteFromBaseFolder(fileName=fileName,destinationFolder=folder)
      fileProcessedCount += 1
      showProgress(current=fileProcessedCount, total=totalFiles)   
 
