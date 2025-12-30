@@ -35,17 +35,29 @@ def copyFromBaseFolderToTargetFolder(fileName: str, destinationFolder: str):
 def isFileMatchingExtention(extentions: list, fileName: str) -> bool:
    for ext in extentions:
      if fileName.endswith(ext):
-        return True 
+        return True; 
    return False;
+
+def countAllFilesInFolder(folderPath: str) -> int:
+   return len([entry for entry in os.listdir(folderPath) if os.path.isfile(os.path.join(folderPath, entry))])
+
+
+def showProgress(current: int, total: int):
+   percent = (current / total) * 100
+   print(f"Progress: {percent:.2f}% ({current}/{total})")
+   
 
 #setting up the folders where the files will be copied to 
 setupFolders()
 
+totalFiles = countAllFilesInFolder(baseFolder)
+print(f"total files found in base folder: {totalFiles}")
+
 # iterating through the files and performing the action
 entries = os.scandir(baseFolder)
+fileProcessedCount = 0
 for entry in entries:
   if entry.is_file:
-
      folder=otherFolder
      fileName = entry.name 
      if isFileMatchingExtention(documentExtentions, fileName=fileName):
@@ -57,7 +69,9 @@ for entry in entries:
      if isFileMatchingExtention(configExtentions, fileName=fileName):
        folder = configFolder      
      # copying the files  
-     copyFromBaseFolderToTargetFolder(fileName=fileName,destinationFolder=folder)   
+     copyFromBaseFolderToTargetFolder(fileName=fileName,destinationFolder=folder)
+     fileProcessedCount += 1
+     showProgress(current=fileProcessedCount, total=totalFiles)   
 
 
 
