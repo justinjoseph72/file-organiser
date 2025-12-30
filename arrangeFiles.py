@@ -22,11 +22,9 @@ def createFolder(folderName):
 
 
 def setupFolders():
-    print("starting to create folders")
     targetFolders=[docFolder,archiveFolders,imageFolder,configFolder,otherFolder]   
     for folder in targetFolders:
-        createFolder(folder)
-    print("created all folders")    
+      createFolder(folder)
 
 def copyFromBaseFolderToTargetFolder(fileName: str, destinationFolder: str):
    fileOriginalPath = f"{baseFolder}/{fileName}"
@@ -42,6 +40,7 @@ def isFileMatchingExtention(extentions: list, fileName: str) -> bool:
 
 def countAllFilesInFolder(folderPath: str) -> int:
    return len([entry for entry in os.listdir(folderPath) if os.path.isfile(os.path.join(folderPath, entry))])
+  
 
 
 # function to show progress
@@ -64,7 +63,7 @@ print(f"total files found in base folder: {totalFiles}")
 entries = os.scandir(baseFolder)
 fileProcessedCount = 0
 for entry in entries:
-  if entry.is_file:
+  if os.path.isfile(entry.path):
      folder=otherFolder
      fileName = entry.name 
      if isFileMatchingExtention(documentExtentions, fileName=fileName):
